@@ -26,7 +26,6 @@ export function PhotoSheet({ processedImageUri, onSheetReady, onError }: PhotoSh
       // Use a slightly smaller photo size to create space for gaps
       const PHOTO_WIDTH_IN = 1.9;
       const PHOTO_HEIGHT_IN = 1.9; // Keep photos square
-      const RED_BACKGROUND = "#FF0000";
 
       const SHEET_WIDTH_PX = SHEET_WIDTH_IN * DPI;
       const SHEET_HEIGHT_PX = SHEET_HEIGHT_IN * DPI;
@@ -45,7 +44,7 @@ export function PhotoSheet({ processedImageUri, onSheetReady, onError }: PhotoSh
       userImage.src = processedImageUri;
 
       userImage.onload = () => {
-        // Create an off-screen canvas for a single photo with red background
+        // Create an off-screen canvas for a single photo
         const photoCanvas = document.createElement('canvas');
         photoCanvas.width = PHOTO_WIDTH_PX;
         photoCanvas.height = PHOTO_HEIGHT_PX;
@@ -55,10 +54,6 @@ export function PhotoSheet({ processedImageUri, onSheetReady, onError }: PhotoSh
           onError();
           return;
         }
-
-        // Add red background
-        photoCtx.fillStyle = RED_BACKGROUND;
-        photoCtx.fillRect(0, 0, PHOTO_WIDTH_PX, PHOTO_HEIGHT_PX);
 
         // Translate to the center of the canvas, rotate, and then draw the image.
         // This corrects the rotation issue where images appear sideways.
