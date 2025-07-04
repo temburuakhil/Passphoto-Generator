@@ -31,15 +31,6 @@ export async function removeBackground(input: RemoveBackgroundInput): Promise<Re
   return removeBackgroundFlow(input);
 }
 
-const removeBackgroundPrompt = ai.definePrompt({
-  name: 'removeBackgroundPrompt',
-  input: {schema: RemoveBackgroundInputSchema},
-  output: {schema: RemoveBackgroundOutputSchema},
-  prompt: `Remove the background from the image, replace it with a solid bright red background (#FF0000), and return the image as a data URI.
-
-Image: {{media url=photoDataUri}}`,
-});
-
 const removeBackgroundFlow = ai.defineFlow(
   {
     name: 'removeBackgroundFlow',
@@ -51,7 +42,7 @@ const removeBackgroundFlow = ai.defineFlow(
         model: 'googleai/gemini-2.0-flash-preview-image-generation',
         prompt: [
           {media: {url: input.photoDataUri}},
-          {text: 'Remove the background from this image and replace it with a solid bright red background (#FF0000).'},
+          {text: 'Isolate the person in the foreground. Replace the background with a solid bright red (#FF0000). The final image must contain the person against the new red background.'},
         ],
         config: {
           responseModalities: ['TEXT', 'IMAGE'],
