@@ -23,8 +23,9 @@ export function PhotoSheet({ processedImageUri, onSheetReady, onError }: PhotoSh
       const DPI = 300;
       const SHEET_WIDTH_IN = 4;
       const SHEET_HEIGHT_IN = 8;
-      const PHOTO_WIDTH_IN = 2;
-      const PHOTO_HEIGHT_IN = 2;
+      // Use a slightly smaller photo size to create space for gaps
+      const PHOTO_WIDTH_IN = 1.9;
+      const PHOTO_HEIGHT_IN = 1.9; // Keep photos square
       const RED_BACKGROUND = "#FF0000";
 
       const SHEET_WIDTH_PX = SHEET_WIDTH_IN * DPI;
@@ -69,15 +70,26 @@ export function PhotoSheet({ processedImageUri, onSheetReady, onError }: PhotoSh
         photoCtx.drawImage(userImage, -PHOTO_WIDTH_PX / 2, -PHOTO_HEIGHT_PX / 2, PHOTO_WIDTH_PX, PHOTO_HEIGHT_PX);
         photoCtx.restore();
 
-        // Arrange 8 photos (2x4 grid) on the 4x8 sheet
+        // Arrange 8 photos (2x4 grid) on the 4x8 sheet with gaps
         const COLS = 2;
         const ROWS = 4;
+        
+        const totalHorizontalSpace = SHEET_WIDTH_PX - (COLS * PHOTO_WIDTH_PX);
+        const horizontalGap = totalHorizontalSpace / (COLS + 1); // Distribute space between photos and as margins
+        
+        const totalVerticalSpace = SHEET_HEIGHT_PX - (ROWS * PHOTO_HEIGHT_PX);
+        const verticalGap = totalVerticalSpace / (ROWS + 1); // Distribute space between photos and as margins
+
         for (let row = 0; row < ROWS; row++) {
           for (let col = 0; col < COLS; col++) {
+            const x = horizontalGap + col * (PHOTO_WIDTH_PX + horizontalGap);
+            const y = verticalGap + row * (PHOTO_HEIGHT_PX + verticalGap);
             ctx.drawImage(
               photoCanvas,
-              col * PHOTO_WIDTH_PX,
-              row * PHOTO_HEIGHT_PX
+              x,
+              y,
+              PHOTO_WIDTH_PX,
+              PHOTO_HEIGHT_PX
             );
           }
         }
