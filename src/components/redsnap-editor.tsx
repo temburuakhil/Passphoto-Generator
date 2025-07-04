@@ -71,14 +71,14 @@ export function RedSnapEditor() {
           <Card className="w-full max-w-md">
             <CardHeader>
               <CardTitle>Your Photos are Ready!</CardTitle>
-              <CardDescription>Download the 4x6 sheet below and print it.</CardDescription>
+              <CardDescription>Download the 4x8 sheet below and print it.</CardDescription>
             </CardHeader>
             <CardContent className="flex justify-center">
               {finalSheet && (
                 <Image
                   src={finalSheet}
                   alt="Printable sheet of passport photos"
-                  width={400}
+                  width={300}
                   height={600}
                   className="rounded-md border shadow-lg"
                   style={{ width: 'auto', height: 'auto', maxHeight: '400px' }}

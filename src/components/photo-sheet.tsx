@@ -22,7 +22,7 @@ export function PhotoSheet({ processedImageUri, onSheetReady, onError }: PhotoSh
 
       const DPI = 300;
       const SHEET_WIDTH_IN = 4;
-      const SHEET_HEIGHT_IN = 6;
+      const SHEET_HEIGHT_IN = 8;
       const PHOTO_WIDTH_IN = 2;
       const PHOTO_HEIGHT_IN = 2;
       const RED_BACKGROUND = "#FF0000";
@@ -59,15 +59,19 @@ export function PhotoSheet({ processedImageUri, onSheetReady, onError }: PhotoSh
         photoCtx.fillStyle = RED_BACKGROUND;
         photoCtx.fillRect(0, 0, PHOTO_WIDTH_PX, PHOTO_HEIGHT_PX);
 
-        // Draw user image on top of the red background
-        // This will scale the image to fit the 2x2 inch square.
-        // For passport photos, you'd typically want to preserve aspect ratio and center,
-        // but for this implementation, we'll stretch to fit as a default.
-        photoCtx.drawImage(userImage, 0, 0, PHOTO_WIDTH_PX, PHOTO_HEIGHT_PX);
+        // Translate to the center of the canvas, rotate, and then draw the image.
+        // This corrects the rotation issue where images appear sideways.
+        photoCtx.save();
+        photoCtx.translate(PHOTO_WIDTH_PX / 2, PHOTO_HEIGHT_PX / 2);
+        photoCtx.rotate(90 * Math.PI / 180); // Rotate 90 degrees clockwise
+        
+        // Draw the image centered on the new rotated coordinates, stretched to fit.
+        photoCtx.drawImage(userImage, -PHOTO_WIDTH_PX / 2, -PHOTO_HEIGHT_PX / 2, PHOTO_WIDTH_PX, PHOTO_HEIGHT_PX);
+        photoCtx.restore();
 
-        // Arrange 6 photos (2x3 grid) on the 4x6 sheet
+        // Arrange 8 photos (2x4 grid) on the 4x8 sheet
         const COLS = 2;
-        const ROWS = 3;
+        const ROWS = 4;
         for (let row = 0; row < ROWS; row++) {
           for (let col = 0; col < COLS; col++) {
             ctx.drawImage(
